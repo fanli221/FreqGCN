@@ -26,7 +26,6 @@ if __name__ == '__main__':
     parser.add_argument('--device', type=str, default=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
     parser.add_argument('--multimodal_threshold', type=float, default=0.5)
     parser.add_argument('--milestone', type=list, default=[100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400])
-    # parser.add_argument('--milestone', type=list, default=[200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800])
     parser.add_argument('--gamma', type=float, default=0.8)
     parser.add_argument('--save_model_interval', type=int, default=100)
     parser.add_argument('--save_metrics_interval', type=int, default=100)
@@ -58,13 +57,6 @@ if __name__ == '__main__':
 
     logger.info(">>> total params: {:.2f}M".format(
         sum(p.numel() for p in list(model.parameters())) / 1000000.0))
-    input_shape = (cfg.batch_size, cfg.n_pre, 3 * cfg.joint_num)
-    t_shape=(cfg.batch_size)
-    x = torch.randn(input_shape).cuda()
-    mod = torch.randn(input_shape).cuda()
-    t=torch.randn(t_shape).cuda()
-    from torchprofile import profile_macs
-    logger.info("Model FLOPS #: {:.2f}G".format(profile_macs(model, (x, t, mod)) / 1e9))
 
     if args.mode == 'train':
         if cfg.dataset == 'amass':
