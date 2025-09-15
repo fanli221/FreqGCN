@@ -43,4 +43,4 @@ python main.py --cfg humaneva --mode train
 ```
 
 ## 🌹 Acknowledgment
-We thank [HumanMAC](https://github.com/LinghaoChan/HumanMAC),[Transfusion](https://github.com/sibotian96/TransFusion),[Comusion](https://github.com/jsun57/CoMusion/) for making their code publicly available.
+We thank [HumanMAC](https://github.com/LinghaoChan/HumanMAC), [Transfusion](https://github.com/sibotian96/TransFusion), [Comusion](https://github.com/jsun57/CoMusion/) for making their code publicly available.
