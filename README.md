@@ -16,12 +16,11 @@ python -m pip install -r requirement.txt
 
 ### 2. Datasets
 
-**Datasets for [Human3.6M](http://vision.imar.ro/human3.6m/description.php), [HumanEva-I](http://humaneva.is.tue.mpg.de/) 
-For Human3.6M and HumanEva-I, we adopt the data preprocessing from [GSPS](https://github.com/wei-mao-2019/gsps).
+We adopt the data preprocessing from [GSPS](https://github.com/wei-mao-2019/gsps), which you can refer to [here](https://drive.google.com/drive/folders/1sb1n9l0Na5EqtapDVShOJJ-v6o-GZrIJ) and download all files into the `./data` directory.
 
 ### 3. Pretrained Models
 
-We provide the pretrained models for all three datasets [here](https://drive.google.com/drive/folders/16iPASM7pnYEixBXaVFnp2pGbjgg-Ppxq?usp=sharing). 
+We provide the pretrained models for all three datasets [here](https://drive.google.com/drive/folders/16iPASM7pnYEixBXaVFnp2pGbjgg-Ppxq?usp=sharing). The pretrained model need to be put in the `./checkpoints` directory.
 
 ## 🔎 Evaluation
 Evaluate on Human3.6M:
@@ -34,10 +33,11 @@ python main.py --cfg humaneva --mode eval --ckpt ./ckeckpoints/humaneva_ckpt.pt
 ```
 
 ## ⏳ Training
-
+Train on Human3.6M:
 ```
 python main.py --cfg h36m --mode train
 ```
+Train on HumanEva-I:
 ```
 python main.py --cfg humaneva --mode train
 ```
