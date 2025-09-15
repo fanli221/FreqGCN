@@ -20,7 +20,7 @@ We adopt the data preprocessing from [GSPS](https://github.com/wei-mao-2019/gsps
 
 ### 3. Pretrained Models
 
-We provide the pretrained models for all three datasets [here](https://drive.google.com/drive/folders/16iPASM7pnYEixBXaVFnp2pGbjgg-Ppxq?usp=sharing). The pretrained model need to be put in the `./checkpoints` directory.
+We provide the pretrained models for all three datasets [here](https://drive.google.com/drive/folders/1YgYcUaAtIz5-RZyg8yz7ZCJW2-g4ZKT1?usp=sharing). The pretrained model need to be put in the `./checkpoints` directory.
 
 ## 🔎 Evaluation
 Evaluate on Human3.6M:
