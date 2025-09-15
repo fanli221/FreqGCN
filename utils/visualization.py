@@ -204,7 +204,7 @@ def render_animation(skeleton, poses_generator, algos, t_hist, fix_0=True, azim=
             writer = Writer(fps=fps, metadata={}, bitrate=bitrate)
             anim.save(output, writer=writer)
         elif output.endswith('.gif'):
-            anim.save(output, dpi=1000, writer='pillow')
+            anim.save(output, dpi=80, writer='pillow')
         else:
             raise ValueError('Unsupported output format (only .mp4 and .gif are supported)')
         print(f'video saved to {output}!')
