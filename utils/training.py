@@ -144,43 +144,42 @@ class Trainer:
 
     def before_val_step(self):
         self.model.eval()
-        # self.t_s = time.time()
-        # self.val_losses = AverageMeter()
-        # self.generator_val = self.dataset['test'].sampling_generator(num_samples=self.cfg.num_val_data_sample,
-        #                                                              batch_size=self.cfg.batch_size)
-        # self.logger.info(f"Starting val epoch {self.iter}:")
+        self.t_s = time.time()
+        self.val_losses = AverageMeter()
+        self.generator_val = self.dataset['test'].sampling_generator(num_samples=self.cfg.num_val_data_sample,
+                                                                     batch_size=self.cfg.batch_size)
+        self.logger.info(f"Starting val epoch {self.iter}:")
 
     def run_val_step(self):
-        pass
-        # for traj_np in self.generator_val:
-        #     with torch.no_grad():
-        #         # (N, t_his + t_pre, joints, 3) -> (N, t_his + t_pre, 3 * (joints - 1))
-        #         # discard the root joint and combine xyz coordinate
-        #         traj_np = traj_np[..., 1:, :].reshape([traj_np.shape[0], self.cfg.t_his + self.cfg.t_pred, -1])
-        #         traj = tensor(traj_np, device=self.cfg.device, dtype=self.cfg.dtype)
-        #         traj_pad = padding_traj(traj, self.cfg.padding, self.cfg.idx_pad,
-        #                                 self.cfg.zero_index)
-        #         # [n_pre × (t_his + t_pre)] matmul [(t_his + t_pre) × 3 * (joints - 1)]
-        #         traj_dct = torch.matmul(self.cfg.dct_m_all[:self.cfg.n_pre], traj)
-        #         traj_dct_mod = torch.matmul(self.cfg.dct_m_all[:self.cfg.n_pre], traj_pad)
+        for traj_np in self.generator_val:
+            with torch.no_grad():
+                # (N, t_his + t_pre, joints, 3) -> (N, t_his + t_pre, 3 * (joints - 1))
+                # discard the root joint and combine xyz coordinate
+                traj_np = traj_np[..., 1:, :].reshape([traj_np.shape[0], self.cfg.t_his + self.cfg.t_pred, -1])
+                traj = tensor(traj_np, device=self.cfg.device, dtype=self.cfg.dtype)
+                traj_pad = padding_traj(traj, self.cfg.padding, self.cfg.idx_pad,
+                                        self.cfg.zero_index)
+                # [n_pre × (t_his + t_pre)] matmul [(t_his + t_pre) × 3 * (joints - 1)]
+                traj_dct = torch.matmul(self.cfg.dct_m_all[:self.cfg.n_pre], traj)
+                traj_dct_mod = torch.matmul(self.cfg.dct_m_all[:self.cfg.n_pre], traj_pad)
 
-        #         if np.random.random() > self.cfg.mod_train:
-        #             traj_dct_mod = None
+                if np.random.random() > self.cfg.mod_train:
+                    traj_dct_mod = None
 
-        #         t = self.diffusion.sample_timesteps(traj.shape[0]).to(self.cfg.device)
-        #         x_t, noise = self.diffusion.noise_motion(traj_dct, t)
-        #         predicted_noise = self.model(x_t, t, mod=traj_dct_mod)
-        #         loss = self.criterion(predicted_noise, noise)
+                t = self.diffusion.sample_timesteps(traj.shape[0]).to(self.cfg.device)
+                x_t, noise = self.diffusion.noise_motion(traj_dct, t)
+                predicted_noise = self.model(x_t, t, mod=traj_dct_mod)
+                loss = self.criterion(predicted_noise, noise)
 
-        #         self.val_losses.update(loss.item())
-        #         self.tb_logger.add_scalar('Loss/val', loss.item(), self.iter)
+                self.val_losses.update(loss.item())
+                self.tb_logger.add_scalar('Loss/val', loss.item(), self.iter)
 
-        #     del loss, traj, traj_dct, traj_dct_mod, traj_pad, traj_np
+            del loss, traj, traj_dct, traj_dct_mod, traj_pad, traj_np
 
     def after_val_step(self):
-        # self.logger.info('====> Epoch: {} Time: {:.2f} Val Loss: {}'.format(self.iter,
-        #                                                                     time.time() - self.t_s,
-        #                                                                     self.val_losses.avg))
+        self.logger.info('====> Epoch: {} Time: {:.2f} Val Loss: {}'.format(self.iter,
+                                                                            time.time() - self.t_s,
+                                                                            self.val_losses.avg))
         if self.cfg.save_model_interval > 0 and (self.iter + 1) % self.cfg.save_model_interval == 0:
             if self.cfg.ema is True:
                 torch.save(self.ema_model.state_dict(),
